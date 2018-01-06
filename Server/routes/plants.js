@@ -5,7 +5,7 @@ const databaseScript = require('../server_modules/databaseScript');
 router.get('/', function(req, res, next) {
     databaseScript.init(function() {
         databaseScript.connect(function() {
-            databaseScript.query('SELECT * FROM pillars', function(rows) {
+            databaseScript.query('SELECT * FROM plants', function(rows) {
                 console.log("Returned rows : ", rows);
                 databaseScript.end();
 
@@ -16,18 +16,18 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
-   var id = parseInt(req.params.id);
+    var id = parseInt(req.params.id);
 
     databaseScript.init(function() {
         databaseScript.connect(function() {
-            databaseScript.query('SELECT * FROM pillars WHERE pillars.Id = ' + id, function(rows) {
+            databaseScript.query('SELECT * FROM plants WHERE plants.Id = ' + id, function(rows) {
                 console.log("Returned rows : ", rows);
                 databaseScript.end();
 
                 if (rows.localeCompare("[]")) {
                     res.send(rows);
                 } else {
-                    res.send("No pillars with this Id have been found");
+                    res.send("No plants with this Id have been found");
                 }
             });
         });
@@ -39,33 +39,14 @@ router.get('/:id/coordinates', function(req, res, next) {
 
     databaseScript.init(function() {
         databaseScript.connect(function() {
-            databaseScript.query('SELECT pillars.Coordinates FROM pillars WHERE pillars.Id = ' + id, function(rows) {
+            databaseScript.query('SELECT plants.Coordinates FROM plants WHERE plants.Id = ' + id, function(rows) {
                 console.log("Returned rows : ", rows);
                 databaseScript.end();
 
                 if (rows.localeCompare("[]")) {
                     res.send(rows);
                 } else {
-                    res.send("No pillars with this Id have been found");
-                }
-            });
-        });
-    });
-});
-
-router.get('/:id/plants', function(req, res, next) {
-    var id = parseInt(req.params.id);
-
-    databaseScript.init(function() {
-        databaseScript.connect(function () {
-            databaseScript.query('SELECT * FROM plants WHERE plants.PillarId = ' + id, function(rows) {
-                console.log("Returned rows : ", rows);
-                databaseScript.end();
-
-                if (rows.localeCompare("[]")) {
-                    res.send(rows);
-                } else {
-                    res.send("No pillars with this Id have been found");
+                    res.send("No plants with this Id have been found");
                 }
             });
         });
