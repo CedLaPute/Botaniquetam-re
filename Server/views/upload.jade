@@ -1,0 +1,7 @@
+extends layout
+
+block content
+    h1= "Ajouter une image"
+    form(method="post", enctype="multipart/form-data", action="/upload/image")
+        input(name="image", type="file", multiple)
+        input(type="submit", value="Upload")
