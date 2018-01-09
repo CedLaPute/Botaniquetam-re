@@ -20,7 +20,7 @@ router.get('/:id', function(req, res, next) {
 
     databaseScript.init(function() {
         databaseScript.connect(function() {
-            databaseScript.query('SELECT * FROM plants WHERE plants.Id = ' + id, function(rows) {
+            databaseScript.query('SELECT plants.Id as plantId, plants.Name as plantName, plants.Description as plantDesc, plants.Coordinates as plantCoord, plants.PillarId as plantPillarId, images.Id as imageId FROM plants, images WHERE images.PlantId = plants.Id AND plants.Id = ' + id, function(rows) {
                 console.log("Returned rows : ", rows);
                 databaseScript.end();
 
