@@ -71,7 +71,7 @@ router.get('/:id', function(req, res, next) {
 
     databaseScript.init(function() {
         databaseScript.connect(function() {
-            databaseScript.query('SELECT plants.Id as plantId, plants.Name as plantName, plants.Description as plantDesc, plants.Coordinates as plantCoord, plants.PillarId as plantPillarId, images.Id as imageId FROM plants, images WHERE images.PlantId = plants.Id AND plants.Id = ' + id, function(rows) {
+            databaseScript.query('SELECT * FROM plants WHERE plants.Id = ' + id, function(rows) {
                 console.log("Returned rows : ", rows);
                 databaseScript.end();
 
@@ -98,6 +98,25 @@ router.get('/:id/coordinates', function(req, res, next) {
                     res.send(rows);
                 } else {
                     res.send("No plants with this Id have been found");
+                }
+            });
+        });
+    });
+});
+
+router.get('/:id/images', function(req, res, next) {
+   var id = parseInt(req.params.id);
+
+    databaseScript.init(function() {
+        databaseScript.connect(function() {
+            databaseScript.query('SELECT * FROM images WHERE images.PlantId = ' + id, function(rows) {
+                console.log("Returned rows : ", rows);
+                databaseScript.end();
+
+                if (rows.localeCompare("[]")) {
+                    res.send(rows);
+                } else {
+                    res.send("No images with this PlantId have been found");
                 }
             });
         });
