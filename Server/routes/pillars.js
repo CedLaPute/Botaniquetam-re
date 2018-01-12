@@ -9,7 +9,45 @@ router.get('/', function(req, res, next) {
                 console.log("Returned rows : ", rows);
                 databaseScript.end();
 
-                res.send(rows);
+                if (rows.localeCompare("[]")) {
+                    res.send(rows);
+                } else {
+                    res.send("No pillars have been found");
+                }
+            });
+        });
+    });
+});
+
+router.get('/coordinates', function(req, res, next) {
+   databaseScript.init(function() {
+       databaseScript.connect(function() {
+           databaseScript.query('SELECT pillars.Id as Id, pillars.Coordinates as Coordinates FROM pillars', function(rows) {
+               console.log("Returned rows : ", rows);
+               databaseScript.end();
+
+               if (rows.localeCompare("[]")) {
+                   res.send(rows);
+               } else {
+                   res.send("No pillars have been found");
+               }
+           });
+       });
+   });
+});
+
+router.get('/descriptions', function(req, res, next) {
+    databaseScript.init(function() {
+        databaseScript.connect(function() {
+            databaseScript.query('SELECT pillars.Id as Id, pillars.Description as Description FROM pillars', function(rows) {
+                console.log("Returned rows : ", rows);
+                databaseScript.end();
+
+                if (rows.localeCompare("[]")) {
+                    res.send(rows);
+                } else {
+                    res.send("No pillars have been found");
+                }
             });
         });
     });

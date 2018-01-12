@@ -15,6 +15,57 @@ router.get('/', function(req, res, next) {
     });
 });
 
+router.get('/names', function(req, res, next) {
+    databaseScript.init(function() {
+        databaseScript.connect(function() {
+            databaseScript.query('SELECT plants.Id as Id, plants.Name as Name FROM plants', function(rows) {
+                console.log("Returned rows : ", rows);
+                databaseScript.end();
+
+                if (rows.localeCompare("[]")) {
+                    res.send(rows);
+                } else {
+                    res.send("No plants have been found");
+                }
+            });
+        });
+    });
+});
+
+router.get('/descriptions', function(req, res, next) {
+    databaseScript.init(function() {
+        databaseScript.connect(function() {
+            databaseScript.query('SELECT plants.Id as Id, plants.Description as Description FROM plants', function(rows) {
+                console.log("Returned rows : ", rows);
+                databaseScript.end();
+
+                if (rows.localeCompare("[]")) {
+                    res.send(rows);
+                } else {
+                    res.send("No plants have been found");
+                }
+            });
+        });
+    });
+});
+
+router.get('/coordinates', function(req, res, next) {
+    databaseScript.init(function() {
+        databaseScript.connect(function() {
+            databaseScript.query('SELECT plants.Id as Id, plants.Coordinates as Coordinates FROM plants', function(rows) {
+                console.log("Returned rows : ", rows);
+                databaseScript.end();
+
+                if (rows.localeCompare("[]")) {
+                    res.send(rows);
+                } else {
+                    res.send("No plants have been found");
+                }
+            });
+        });
+    });
+});
+
 router.get('/:id', function(req, res, next) {
     var id = parseInt(req.params.id);
 
