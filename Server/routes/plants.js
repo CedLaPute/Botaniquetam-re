@@ -96,71 +96,88 @@ router.post('/upload', function(req, res, next) {
     var coordinateY = req.body.coordinateYInput;
     var pillarId = req.body.pillarIdInput;
 
-    databaseScript.init(function () {
-        databaseScript.connect(function () {
-            databaseScript.query('INSERT INTO plants (Name, Description, CoordinateX, CoordinateY, PillarId) VALUES ("' + name + '", "' + description + '", ' + coordinateX + ', ' + coordinateY + ', ' + pillarId + ')', function () {
-                databaseScript.end();
-                res.end("The data has been uploaded");
+    if (!name) {
+        res.end("Error : The name is empty");
+    }
+    else if (!description) {
+        res.end("Error : The description is empty");
+    }
+    else if (isNaN(coordinateX) || isNaN(coordinateY)) {
+        res.end("Error : Coordinates are not numbers");
+    }
+    else {
+        databaseScript.init(function () {
+            databaseScript.connect(function () {
+                databaseScript.query('INSERT INTO plants (Name, Description, CoordinateX, CoordinateY, PillarId) VALUES ("' + name + '", "' + description + '", ' + coordinateX + ', ' + coordinateY + ', ' + pillarId + ')', function () {
+                    databaseScript.end();
+                    res.end("The data has been uploaded");
+                });
             });
         });
-    });
+    }
 });
 
 router.get('/:id', function(req, res, next) {
     var id = parseInt(req.params.id);
 
-    databaseScript.init(function() {
-        databaseScript.connect(function() {
-            databaseScript.query('SELECT * FROM plants WHERE plants.Id = ' + id, function(rows) {
-                console.log("Returned rows : ", rows);
-                databaseScript.end();
+    if (isNaN(id)) {
+        databaseScript.init(function () {
+            databaseScript.connect(function () {
+                databaseScript.query('SELECT * FROM plants WHERE plants.Id = ' + id, function (rows) {
+                    console.log("Returned rows : ", rows);
+                    databaseScript.end();
 
-                if (rows.localeCompare("[]")) {
-                    res.send(rows);
-                } else {
-                    res.send("No plants with this Id have been found");
-                }
+                    if (rows.localeCompare("[]")) {
+                        res.send(rows);
+                    } else {
+                        res.send("No plants with this Id have been found");
+                    }
+                });
             });
         });
-    });
+    }
 });
 
 router.get('/:id/coordinates', function(req, res, next) {
     var id = parseInt(req.params.id);
 
-    databaseScript.init(function() {
-        databaseScript.connect(function() {
-            databaseScript.query('SELECT plants.Coordinates FROM plants WHERE plants.Id = ' + id, function(rows) {
-                console.log("Returned rows : ", rows);
-                databaseScript.end();
+    if (isNaN(id)) {
+        databaseScript.init(function () {
+            databaseScript.connect(function () {
+                databaseScript.query('SELECT plants.Coordinates FROM plants WHERE plants.Id = ' + id, function (rows) {
+                    console.log("Returned rows : ", rows);
+                    databaseScript.end();
 
-                if (rows.localeCompare("[]")) {
-                    res.send(rows);
-                } else {
-                    res.send("No plants with this Id have been found");
-                }
+                    if (rows.localeCompare("[]")) {
+                        res.send(rows);
+                    } else {
+                        res.send("No plants with this Id have been found");
+                    }
+                });
             });
         });
-    });
+    }
 });
 
 router.get('/:id/images', function(req, res, next) {
    var id = parseInt(req.params.id);
 
-    databaseScript.init(function() {
-        databaseScript.connect(function() {
-            databaseScript.query('SELECT * FROM images WHERE images.PlantId = ' + id, function(rows) {
-                console.log("Returned rows : ", rows);
-                databaseScript.end();
+   if (isNaN(id)) {
+       databaseScript.init(function () {
+           databaseScript.connect(function () {
+               databaseScript.query('SELECT * FROM images WHERE images.PlantId = ' + id, function (rows) {
+                   console.log("Returned rows : ", rows);
+                   databaseScript.end();
 
-                if (rows.localeCompare("[]")) {
-                    res.send(rows);
-                } else {
-                    res.send("No images with this PlantId have been found");
-                }
-            });
-        });
-    });
+                   if (rows.localeCompare("[]")) {
+                       res.send(rows);
+                   } else {
+                       res.send("No images with this PlantId have been found");
+                   }
+               });
+           });
+       });
+   }
 });
 
 module.exports = router;
