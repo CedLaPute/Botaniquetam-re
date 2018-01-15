@@ -6,6 +6,9 @@ router.get('/:id', function(req, res, next) {
     var id = parseInt(req.params.id);
 
     if (isNaN(id)) {
+        res.send("Requested ID is not a number");
+    }
+    else {
         databaseScript.init(function () {
             databaseScript.connect(function () {
                 databaseScript.query('SELECT images.Name FROM images WHERE images.Id = ' + id, function (rows) {

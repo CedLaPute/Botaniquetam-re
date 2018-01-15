@@ -19,10 +19,27 @@ router.get('/', function(req, res, next) {
     });
 });
 
+router.get('/names', function(req, res, next) {
+    databaseScript.init(function() {
+        databaseScript.connect(function() {
+            databaseScript.query('SELECT pillars.Id as Id, pillars.Name as Name FROM pillars', function(rows) {
+                console.log("Returned rows : ", rows);
+                databaseScript.end();
+
+                if (rows.localeCompare("[]")) {
+                    res.send(rows);
+                } else {
+                    res.send("No pillars have been found");
+                }
+            });
+        });
+    });
+});
+
 router.get('/coordinates', function(req, res, next) {
    databaseScript.init(function() {
        databaseScript.connect(function() {
-           databaseScript.query('SELECT pillars.Id as Id, pillars.Coordinates as Coordinates FROM pillars', function(rows) {
+           databaseScript.query('SELECT pillars.Id as Id, pillars.CoordinateX as CoordinateX, pillars.CoordinateY as CoordinateY FROM pillars', function(rows) {
                console.log("Returned rows : ", rows);
                databaseScript.end();
 
@@ -118,7 +135,7 @@ router.get('/:id/coordinates', function(req, res, next) {
     else {
         databaseScript.init(function () {
             databaseScript.connect(function () {
-                databaseScript.query('SELECT pillars.Coordinates FROM pillars WHERE pillars.Id = ' + id, function (rows) {
+                databaseScript.query('SELECT pillars.CoordinateX as CoordinateX, pillars.CoordinateY as CoordinateY FROM pillars WHERE pillars.Id = ' + id, function (rows) {
                     console.log("Returned rows : ", rows);
                     databaseScript.end();
 
@@ -149,12 +166,36 @@ router.get('/:id/plants', function(req, res, next) {
                     if (rows.localeCompare("[]")) {
                         res.send(rows);
                     } else {
-                        res.send("No pillars with this Id have been found");
+                        res.send("No plants with this PillarId have been found");
                     }
                 });
             });
         });
     }
+});
+
+router.get('/:id/images', function(req, res, next) {
+   var id = parseInt(req.params.id);
+
+   if (isNaN(id)) {
+       res.send("Requested ID is not a number");
+   }
+   else {
+       databaseScript.init(function () {
+           databaseScript.connect(function () {
+               databaseScript.query('SELECT * FROM images WHERE images.PillarId = ' + id, function (rows) {
+                   console.log("Returned rows : ", rows);
+                   databaseScript.end();
+
+                   if (rows.localeCompare("[]")) {
+                       res.send(rows);
+                   } else {
+                       res.send("No images with this PillarId have been found");
+                   }
+               });
+           });
+       });
+   }
 });
 
 module.exports = router;

@@ -52,7 +52,7 @@ router.get('/descriptions', function(req, res, next) {
 router.get('/coordinates', function(req, res, next) {
     databaseScript.init(function() {
         databaseScript.connect(function() {
-            databaseScript.query('SELECT plants.Id as Id, plants.Coordinates as Coordinates FROM plants', function(rows) {
+            databaseScript.query('SELECT plants.Id as Id, plants.CoordinateX as CoordinateX, plants.CoordinateY as CoordinateY FROM plants', function(rows) {
                 console.log("Returned rows : ", rows);
                 databaseScript.end();
 
@@ -121,6 +121,9 @@ router.get('/:id', function(req, res, next) {
     var id = parseInt(req.params.id);
 
     if (isNaN(id)) {
+        res.send("Requested ID is not a number");
+    }
+    else {
         databaseScript.init(function () {
             databaseScript.connect(function () {
                 databaseScript.query('SELECT * FROM plants WHERE plants.Id = ' + id, function (rows) {
@@ -142,9 +145,12 @@ router.get('/:id/coordinates', function(req, res, next) {
     var id = parseInt(req.params.id);
 
     if (isNaN(id)) {
+        res.send("Requested ID is not a number");
+    }
+    else {
         databaseScript.init(function () {
             databaseScript.connect(function () {
-                databaseScript.query('SELECT plants.Coordinates FROM plants WHERE plants.Id = ' + id, function (rows) {
+                databaseScript.query('SELECT plants.CoordinateX as CoordinateX, plants.CoordinateY as CoordinateY FROM plants WHERE plants.Id = ' + id, function (rows) {
                     console.log("Returned rows : ", rows);
                     databaseScript.end();
 
@@ -163,6 +169,9 @@ router.get('/:id/images', function(req, res, next) {
    var id = parseInt(req.params.id);
 
    if (isNaN(id)) {
+       res.send("Requested ID is not a number");
+   }
+   else {
        databaseScript.init(function () {
            databaseScript.connect(function () {
                databaseScript.query('SELECT * FROM images WHERE images.PlantId = ' + id, function (rows) {
