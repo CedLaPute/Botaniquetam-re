@@ -65,7 +65,6 @@ router.post('/image', function(req, res, next) {
         console.log(pillarId);
         console.log(plantId);
 
-
         var filenames = req.files.map(function(file) {
            return file.filename;
         });

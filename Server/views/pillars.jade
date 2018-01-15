@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    h1= "Ajouter un pillier"
+
+    form(method="post", action="/pillars/upload")
+
+        div(class="form-group")
+            label(for="nameInput") Nom du pillier
+            input(class="form-control", type="text", id="nameInput", name="nameInput", placeholder="Name")
+
+        div(class="form-group")
+            label(for="descriptionInput") Description du pillier
+            textarea(class="form-control", rows="5", id="descriptionInput", name="descriptionInput", placeholder="Description")
+
+        div(class="form-group")
+            label(for="coordinateXInput") Coordonnée en X du pillier
+            input(class="form-control", type="text", id="coordinateXInput", name="coordinateXInput", placeholder="0.00")
+
+        div(class="form-group")
+            label(for="coordinateYInput") Coordonnée en Y du pillier
+            input(class="form-control", type="text", id="coordinateYInput", name="coordinateYInput", placeholder="0.00")
+
+        input(type="submit", value="Upload", class="btn btn-default")

@@ -66,6 +66,46 @@ router.get('/coordinates', function(req, res, next) {
     });
 });
 
+router.get('/add', function(req, res, next) {
+    databaseScript.init(function () {
+        databaseScript.connect(function () {
+            databaseScript.query('SELECT pillars.Id as PillarId FROM pillars', function (pillarsRow) {
+
+                var pillarjsonarray = JSON.parse(pillarsRow);
+                var pillararray = [];
+
+                pillararray.push(0);
+
+                for (var i = 0; i < pillarjsonarray.length; i++) {
+                    pillararray.push(pillarjsonarray[i].PillarId);
+                }
+                console.log(pillararray);
+
+                res.render('plants', {title: 'Express', pillars: pillararray});
+
+            });
+        });
+    });
+});
+
+router.post('/upload', function(req, res, next) {
+
+    var name = req.body.nameInput;
+    var description = req.body.descriptionInput;
+    var coordinateX = req.body.coordinateXInput;
+    var coordinateY = req.body.coordinateYInput;
+    var pillarId = req.body.pillarIdInput;
+
+    databaseScript.init(function () {
+        databaseScript.connect(function () {
+            databaseScript.query('INSERT INTO plants (Name, Description, CoordinateX, CoordinateY, PillarId) VALUES ("' + name + '", "' + description + '", ' + coordinateX + ', ' + coordinateY + ', ' + pillarId + ')', function () {
+                databaseScript.end();
+                res.end("The data has been uploaded");
+            });
+        });
+    });
+});
+
 router.get('/:id', function(req, res, next) {
     var id = parseInt(req.params.id);
 

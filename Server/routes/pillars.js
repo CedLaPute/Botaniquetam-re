@@ -53,6 +53,27 @@ router.get('/descriptions', function(req, res, next) {
     });
 });
 
+router.get('/add', function(req, res, next) {
+    res.render('pillars', {title: 'Express'});
+});
+
+router.post('/upload', function(req, res) {
+
+    var name = req.body.nameInput;
+    var description = req.body.descriptionInput;
+    var coordinateX = req.body.coordinateXInput;
+    var coordinateY = req.body.coordinateYInput;
+
+    databaseScript.init(function () {
+        databaseScript.connect(function () {
+            databaseScript.query('INSERT INTO pillars (Name, Description, CoordinateX, CoordinateY) VALUES ("' + name + '", "' + description + '", ' + coordinateX + ', ' + coordinateY + ')', function () {
+                databaseScript.end();
+                res.end("The data has been uploaded");
+            });
+        });
+    });
+});
+
 router.get('/:id', function(req, res, next) {
    var id = parseInt(req.params.id);
 
