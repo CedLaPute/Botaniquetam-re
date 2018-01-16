@@ -3,9 +3,9 @@ class db {
         this._dbMysql = require('mysql');
         this._dbConnection = this._dbMysql.createConnection({
            host: 'localhost',
-           user: 'root',
-           password: '', // INSERT PASSWORD HERE,
-           database: 'garden'
+           user: 'zhaw',
+           password: 'botanic', // INSERT PASSWORD HERE,
+           database: 'zhaw'
         });
     }
 }
@@ -24,7 +24,7 @@ module.exports = {
     connect: function(_callback) {
         database._dbConnection.connect(function(err) {
             if (err) throw err;
-            console.log("Connected at localhost:garden database");
+            console.log("Connected at localhost:zhaw database");
             _callback();
         });
     },
