@@ -67,7 +67,7 @@ router.get('/descriptions', function(req, res, next) {
 });
 
 router.get('/add', function(req, res, next) {
-    res.render('pillarsAdd', {title: 'Express'});
+    res.render('pillarsAdd', {title: 'ZHAW Botanic'});
 });
 
 router.post('/upload', function(req, res) {
@@ -115,7 +115,7 @@ router.get('/update/:id', function(req, res, next) {
                     } else {
                         var pillarArray = JSON.parse(rows);
 
-                        res.render('pillarsUpdate', {title: 'Express', pillarId: pillarArray[0].Id, pillarName: pillarArray[0].Name,
+                        res.render('pillarsUpdate', {title: 'ZHAW Botanic', pillarId: pillarArray[0].Id, pillarName: pillarArray[0].Name,
                             pillarDescription: pillarArray[0].Description, pillarCoordinateX: pillarArray[0].CoordinateX, pillarCoordinateY: pillarArray[0].CoordinateY});
                     }
                 });

@@ -76,7 +76,7 @@ router.get('/add', function(req, res, next) {
                     pillararray.push(pillarjsonarray[i].PillarId);
                 }
 
-                res.render('plantsAdd', {title: 'Express', pillars: pillararray});
+                res.render('plantsAdd', {title: 'ZHAW Botanic', pillars: pillararray});
 
             });
         });
@@ -145,7 +145,7 @@ router.get('/update/:id', function(req, res, next) {
 
                                var plantArray = JSON.parse(plantsRows);
 
-                               res.render('plantsUpdate', {title: 'Express', plantId: plantArray[0].Id, plantName: plantArray[0].Name, plantDescription: plantArray[0].Description,
+                               res.render('plantsUpdate', {title: 'ZHAW Botanic', plantId: plantArray[0].Id, plantName: plantArray[0].Name, plantDescription: plantArray[0].Description,
                                 plantCoordinateX: plantArray[0].CoordinateX, plantCoordinateY: plantArray[0].CoordinateY, pillars: pillararray, selectedPillarId: plantArray[0].PillarId});
                            }
                         });

@@ -29,7 +29,7 @@ router.get('/', function(req, res, next) {
 
                     databaseScript.end();
 
-                    res.render('uploadVideo', {title: 'Express', plants: plantarray, pillars: pillararray});
+                    res.render('uploadVideo', {title: 'ZHAW Botanic', plants: plantarray, pillars: pillararray});
                 });
             });
         });

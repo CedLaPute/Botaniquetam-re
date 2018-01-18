@@ -44,7 +44,7 @@ router.get('/', function(req, res, next) {
 
                     databaseScript.end();
 
-                    res.render('uploadImage', {title: 'Express', pillars: pillararray, plants: plantarray});
+                    res.render('uploadImage', {title: 'ZHAW Botanic', pillars: pillararray, plants: plantarray});
                 });
             });
         });
