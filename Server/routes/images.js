@@ -12,7 +12,6 @@ router.get('/:id', function(req, res, next) {
         databaseScript.init(function () {
             databaseScript.connect(function () {
                 databaseScript.query('SELECT images.Name FROM images WHERE images.Id = ' + id, function (rows) {
-                    console.log("Returned rows : ", rows);
                     databaseScript.end();
 
                     if (rows.localeCompare("[]")) {

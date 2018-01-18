@@ -1,0 +1,25 @@
+extends layout
+
+block content
+    h1= "Modifier un pillier"
+
+    form(method="post", action="/pillars/updateData")
+
+        input(type="hidden", id="idInput", name="idInput", value= pillarId)
+        div(class="form-group")
+            label(for="nameInput") Nom du pillier
+            input(class="form-control", type="text", id="nameInput", name="nameInput", placeholder="Name", value= pillarName)
+
+        div(class="form-group")
+            label(for="descriptionInput") Description du pillier
+            textarea(class="form-control", rows="5", id="descriptionInput", name="descriptionInput", placeholder="Description") #{pillarDescription}
+
+        div(class="form-group")
+            label(for="coordinateXInput") Coordonnée en X du pillier
+            input(class="form-control", type="text", id="coordinateXInput", name="coordinateXInput", placeholder="0.00", value= pillarCoordinateX)
+
+        div(class="form-group")
+            label(for="coordinateYInput") Coordonnée en Y du pillier
+            input(class="form-control", type="text", id="coordinateYInput", name="coordinateYInput", placeholder="0.00", value= pillarCoordinateY)
+
+        input(type="submit", value="Update", class="btn btn-default")

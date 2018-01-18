@@ -1,0 +1,38 @@
+extends layout
+
+block content
+    h1= "Modifier une plante"
+
+    form(method="post", action="/plants/updateData")
+
+        input(type="hidden", id="idInput", name="idInput", value= plantId)
+        div(class="form-group")
+            label(for="nameInput") Nom de la plante
+            input(class="form-control", type="text", id="nameInput", name="nameInput", placeholder="Name", value= plantName)
+
+        div(class="form-group")
+            label(for="descriptionInput") Description de la plante
+            textarea(class="form-control", rows="5", id="descriptionInput", name="descriptionInput", placeholder="Description") #{plantDescription}
+
+        div(class="form-group")
+            label(for="coordinateXInput") Coordonnée en X de la plante
+            input(class="form-control", type="text", id="coordinateXInput", name="coordinateXInput", placeholder="0.00", value= plantCoordinateX)
+
+        div(class="form-group")
+            label(for="coordinateYInput") Coordonnée en Y de la plante
+            input(class="form-control", type="text", id="coordinateYInput", name="coordinateYInput", placeholder="0.00", value= plantCoordinateY)
+
+        div(class="form-group")
+            label(for="pillarIdInput") Selectionner l'id du pillier associé à la plante
+            select(class="form-control", id="pillarIdInput", name="pillarIdInput")
+                each pillarId in pillars
+                    if (pillarId === 0 && pillarId === selectedPillarId)
+                        option(value= pillarId, selected="true") Aucun
+                    else if (pillarId === 0)
+                        option(value= pillarId) Aucun
+                    else if (pillarId > 0 && pillarId === selectedPillarId)
+                        option(value= pillarId, selected="true") #{pillarId}
+                    else if (pillarId > 0)
+                        option(value= pillarId) #{pillarId}
+
+        input(type="submit", value="Update", class="btn btn-default")

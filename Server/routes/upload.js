@@ -30,7 +30,6 @@ router.get('/', function(req, res, next) {
                 for (var i = 0; i < pillarjsonarray.length; i++) {
                     pillararray.push(pillarjsonarray[i].PillarId);
                 }
-                console.log(pillararray);
 
                 databaseScript.query('SELECT plants.Id as PlantId FROM plants', function (plantsRow) {
 
@@ -42,7 +41,6 @@ router.get('/', function(req, res, next) {
                     for (var i = 0; i < plantjsonarray.length; i++) {
                         plantarray.push(plantjsonarray[i].PlantId);
                     }
-                    console.log(plantarray);
 
                     databaseScript.end();
 
@@ -61,9 +59,6 @@ router.post('/image', function(req, res, next) {
 
         var pillarId = req.body.selectPillarId;
         var plantId = req.body.selectPlantId;
-
-        console.log(pillarId);
-        console.log(plantId);
 
         var filenames = req.files.map(function(file) {
            return file.filename;
