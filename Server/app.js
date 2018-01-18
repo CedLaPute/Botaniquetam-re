@@ -10,7 +10,9 @@ var users = require('./routes/users');
 var pillars = require('./routes/pillars');
 var plants = require('./routes/plants');
 var images = require('./routes/images');
-var upload = require('./routes/upload');
+var videos = require('./routes/videos');
+var uploadImage = require('./routes/uploadImage');
+var uploadVideo = require('./routes/uploadVideo');
 
 var app = express();
 
@@ -31,7 +33,9 @@ app.use('/users', users);
 app.use('/pillars', pillars);
 app.use('/plants', plants);
 app.use('/images', images);
-app.use('/upload', upload);
+app.use('/videos', videos);
+app.use('/uploadImage', uploadImage);
+app.use('/uploadVideo', uploadVideo);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

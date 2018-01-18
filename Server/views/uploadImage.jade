@@ -3,13 +3,13 @@ extends layout
 block content
     h1= "Ajouter une image"
 
-    form(method="post", enctype="multipart/form-data", action="/upload/image")
+    form(method="post", enctype="multipart/form-data", action="/uploadImage/upload")
 
         div(class="form-group")
             label(for="selectPillarId") Selectionner l'id du pillier
             select(class="form-control", id="selectPillarId", name="selectPillarId")
                 each pillarId in pillars
-                    if (pillarId == 0)
+                    if (pillarId === 0)
                         option(value=pillarId) Aucun
                     if (pillarId > 0)
                         option(value=pillarId) #{pillarId}
@@ -19,11 +19,11 @@ block content
             label(for="selectPlantId") Selectionner l'id de la plante
             select(class="form-control", id="selectPlantId", name="selectPlantId")
                 each plantId in plants
-                    if (plantId == 0)
+                    if (plantId === 0)
                         option(value=plantId) Aucun
                     if (plantId > 0)
                         option(value=plantId) #{plantId}
 
         div(class="form-group")
-            input(name="image", type="file", multiple)
+            input(name="image", type="file", accept="image/*", multiple)
         input(type="submit", value="Upload", class="btn btn-default")

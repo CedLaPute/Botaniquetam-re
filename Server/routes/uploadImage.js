@@ -44,14 +44,14 @@ router.get('/', function(req, res, next) {
 
                     databaseScript.end();
 
-                    res.render('upload', {title: 'Express', pillars: pillararray, plants: plantarray});
+                    res.render('uploadImage', {title: 'Express', pillars: pillararray, plants: plantarray});
                 });
             });
         });
     });
 });
 
-router.post('/image', function(req, res, next) {
+router.post('/upload', function(req, res, next) {
     upload(req, res, function(err) {
         if (err) {
             return res.end("Error uploading file");
@@ -64,17 +64,27 @@ router.post('/image', function(req, res, next) {
            return file.filename;
         });
 
-        databaseScript.init(function() {
-            databaseScript.connect(function() {
+        if (isNaN(pillarId)) {
+            res.end("PillarId is not a number");
+        } else if (isNaN(plantId)) {
+            res.end("PlantId is not a number");
+        } else if (typeof filenames === 'undefined' || filenames.length === 0) {
+            res.end("No files have been selected");
+        }
+        else {
+            databaseScript.init(function () {
+                databaseScript.connect(function () {
 
-                for (i in filenames) {
-                    databaseScript.query('INSERT INTO images (Name, PlantId, PillarId) VALUES ("' + filenames[i] + '", ' + plantId + ', ' + pillarId + ')', function(){});
-                }
-                databaseScript.end();
+                    for (i in filenames) {
+                        databaseScript.query('INSERT INTO images (Name, PlantId, PillarId) VALUES ("' + filenames[i] + '", ' + plantId + ', ' + pillarId + ')', function () {
+                        });
+                    }
+                    databaseScript.end();
+                });
             });
-        });
 
-        res.end("Files have been uploaded");
+            res.end("Files have been uploaded");
+        }
    });
 });
 

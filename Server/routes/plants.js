@@ -83,7 +83,7 @@ router.get('/add', function(req, res, next) {
     });
 });
 
-router.post('/upload', function(req, res, next) {
+router.post('/upload', function(req, res) {
 
     var name = req.body.nameInput;
     var description = req.body.descriptionInput;

@@ -1,0 +1,30 @@
+extends layout
+
+block content
+    h1= "Ajouter une vidéo"
+
+    form(method="post", action="/uploadVideo/upload")
+
+        div(class="form-group")
+            label(for="selectPillarId") Selectionner l'id du pillier
+            select(class="form-control", id="selectPillarId", name="selectPillarId")
+                each pillarId in pillars
+                    if (pillarId === 0)
+                        option(value=pillarId) Aucun
+                    if (pillarId > 0)
+                        option(value=pillarId) #{pillarId}
+
+
+        div(class="form-group")
+            label(for="selectPlantId") Selectionner l'id de la plante
+            select(class="form-control", id="selectPlantId", name="selectPlantId")
+                each plantId in plants
+                    if (plantId === 0)
+                        option(value=plantId) Aucun
+                    if (plantId > 0)
+                        option(value=plantId) #{plantId}
+
+        div(class="form-group")
+            label(for="UrlInput") Url youtube de la vidéo
+            input(class="form-control", name="UrlInput", id="UrlInput", type="text", placeholder="www.youtube.com/watch?v=XXXXXXXX")
+        input(type="submit", value="Upload", class="btn btn-default")
