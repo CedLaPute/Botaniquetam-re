@@ -1,9 +1,8 @@
 import { combineReducers } from 'redux'
-import example from "./example"
-
+import plants from "./plants"
 
 const rootReducer = combineReducers({
-    example
+    plants
 })
 
 export default rootReducer
