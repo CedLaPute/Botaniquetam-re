@@ -1,68 +1,55 @@
 var express = require('express');
 var router = express.Router();
-const databaseScript = require('../server_modules/databaseScript');
 
-router.get('/', function(req, res, next) {
-    databaseScript.init(function() {
-        databaseScript.connect(function() {
-            databaseScript.query('SELECT * FROM pillars', function(rows) {
-                databaseScript.end();
+router.get('/', function(req, res) {
+    var db = req.app.get('db');
 
-                if (rows.localeCompare("[]")) {
-                    res.send(rows);
-                } else {
-                    res.send("No pillars have been found");
-                }
-            });
-        });
+    db.query('SELECT * FROM pillars', function(rows) {
+
+        if (rows.localeCompare("[]")) {
+            res.send(rows);
+        } else {
+            res.send("No pillars have been found");
+        }
     });
 });
 
-router.get('/names', function(req, res, next) {
-    databaseScript.init(function() {
-        databaseScript.connect(function() {
-            databaseScript.query('SELECT pillars.Id as Id, pillars.Name as Name FROM pillars', function(rows) {
-                databaseScript.end();
+router.get('/names', function(req, res) {
+    var db = req.app.get('db');
 
-                if (rows.localeCompare("[]")) {
-                    res.send(rows);
-                } else {
-                    res.send("No pillars have been found");
-                }
-            });
-        });
+    db.query('SELECT pillars.Id as Id, pillars.Name as Name FROM pillars', function(rows) {
+
+        if (rows.localeCompare("[]")) {
+            res.send(rows);
+        } else {
+            res.send("No pillars have been found");
+        }
     });
 });
 
-router.get('/coordinates', function(req, res, next) {
-   databaseScript.init(function() {
-       databaseScript.connect(function() {
-           databaseScript.query('SELECT pillars.Id as Id, pillars.CoordinateX as CoordinateX, pillars.CoordinateY as CoordinateY FROM pillars', function(rows) {
-               databaseScript.end();
+router.get('/coordinates', function(req, res) {
+    var db = req.app.get('db');
 
-               if (rows.localeCompare("[]")) {
-                   res.send(rows);
-               } else {
-                   res.send("No pillars have been found");
-               }
-           });
-       });
+    db.query('SELECT pillars.Id as Id, pillars.CoordinateX as CoordinateX, pillars.CoordinateY as CoordinateY FROM pillars', function(rows) {
+
+       if (rows.localeCompare("[]")) {
+           res.send(rows);
+       } else {
+           res.send("No pillars have been found");
+       }
    });
 });
 
 router.get('/descriptions', function(req, res, next) {
-    databaseScript.init(function() {
-        databaseScript.connect(function() {
-            databaseScript.query('SELECT pillars.Id as Id, pillars.Description as Description FROM pillars', function(rows) {
-                databaseScript.end();
+    var db = req.app.get('db');
 
-                if (rows.localeCompare("[]")) {
-                    res.send(rows);
-                } else {
-                    res.send("No pillars have been found");
-                }
-            });
-        });
+    db.query('SELECT pillars.Id as Id, pillars.Description as Description FROM pillars', function(rows) {
+
+        if (rows.localeCompare("[]")) {
+            res.send(rows);
+        } else {
+            res.send("No pillars have been found");
+        }
     });
 });
 
@@ -87,13 +74,8 @@ router.post('/upload', function(req, res) {
         res.end("Error : Coordinates are not numbers");
     }
     else {
-        databaseScript.init(function () {
-            databaseScript.connect(function () {
-                databaseScript.query('INSERT INTO pillars (Name, Description, CoordinateX, CoordinateY) VALUES ("' + name + '", "' + description + '", ' + coordinateX + ', ' + coordinateY + ')', function () {
-                    databaseScript.end();
-                    res.end("The data has been uploaded");
-                });
-            });
+        db.query('INSERT INTO pillars (Name, Description, CoordinateX, CoordinateY) VALUES ("' + name + '", "' + description + '", ' + coordinateX + ', ' + coordinateY + ')', function () {
+            res.end("The data has been uploaded");
         });
     }
 });
@@ -105,21 +87,18 @@ router.get('/update/:id', function(req, res, next) {
         res.send("Requested ID is not a number");
     }
     else {
-        databaseScript.init(function () {
-            databaseScript.connect(function () {
-                databaseScript.query('SELECT * FROM pillars WHERE pillars.Id = ' + id, function (rows) {
-                    databaseScript.end();
+        var db = req.app.get('db');
 
-                    if (rows.localeCompare("[]") === 0) {
-                        res.send("No pillars with this Id have been found");
-                    } else {
-                        var pillarArray = JSON.parse(rows);
+        db.query('SELECT * FROM pillars WHERE pillars.Id = ' + id, function (rows) {
 
-                        res.render('pillarsUpdate', {title: 'ZHAW Botanic', pillarId: pillarArray[0].Id, pillarName: pillarArray[0].Name,
-                            pillarDescription: pillarArray[0].Description, pillarCoordinateX: pillarArray[0].CoordinateX, pillarCoordinateY: pillarArray[0].CoordinateY});
-                    }
-                });
-            });
+            if (rows.localeCompare("[]") === 0) {
+                res.send("No pillars with this Id have been found");
+            } else {
+                var pillarArray = JSON.parse(rows);
+
+                res.render('pillarsUpdate', {title: 'ZHAW Botanic', pillarId: pillarArray[0].Id, pillarName: pillarArray[0].Name,
+                    pillarDescription: pillarArray[0].Description, pillarCoordinateX: pillarArray[0].CoordinateX, pillarCoordinateY: pillarArray[0].CoordinateY});
+            }
         });
     }
 });
@@ -144,13 +123,10 @@ router.post('/updateData', function(req, res) {
         res.end("Error : Coordinates are not numbers");
     }
     else {
-        databaseScript.init(function () {
-            databaseScript.connect(function () {
-                databaseScript.query('UPDATE pillars SET Name="' + name + '", Description="' + description + '", CoordinateX= ' + coordinateX + ', CoordinateY=' + coordinateY + '  WHERE Id = ' + id, function () {
-                    databaseScript.end();
-                    res.end("The data has been updated");
-                });
-            });
+        var db = req.app.get('db');
+
+        db.query('UPDATE pillars SET Name="' + name + '", Description="' + description + '", CoordinateX= ' + coordinateX + ', CoordinateY=' + coordinateY + '  WHERE Id = ' + id, function () {
+            res.end("The data has been updated");
         });
     }
 });
@@ -162,18 +138,14 @@ router.get('/:id', function(req, res, next) {
        res.send("Requested ID is not a number");
    }
    else {
-       databaseScript.init(function () {
-           databaseScript.connect(function () {
-               databaseScript.query('SELECT * FROM pillars WHERE pillars.Id = ' + id, function (rows) {
-                   databaseScript.end();
+       var db = req.app.get('db');
 
-                   if (rows.localeCompare("[]")) {
-                       res.send(rows);
-                   } else {
-                       res.send("No pillars with this Id have been found");
-                   }
-               });
-           });
+       db.query('SELECT * FROM pillars WHERE pillars.Id = ' + id, function (rows) {
+           if (rows.localeCompare("[]")) {
+               res.send(rows);
+           } else {
+               res.send("No pillars with this Id have been found");
+           }
        });
    }
 });
@@ -185,18 +157,15 @@ router.get('/:id/coordinates', function(req, res, next) {
         res.send("Requested ID is not a number");
     }
     else {
-        databaseScript.init(function () {
-            databaseScript.connect(function () {
-                databaseScript.query('SELECT pillars.CoordinateX as CoordinateX, pillars.CoordinateY as CoordinateY FROM pillars WHERE pillars.Id = ' + id, function (rows) {
-                    databaseScript.end();
+        var db = req.app.get('db');
 
-                    if (rows.localeCompare("[]")) {
-                        res.send(rows);
-                    } else {
-                        res.send("No pillars with this Id have been found");
-                    }
-                });
-            });
+        db.query('SELECT pillars.CoordinateX as CoordinateX, pillars.CoordinateY as CoordinateY FROM pillars WHERE pillars.Id = ' + id, function (rows) {
+
+            if (rows.localeCompare("[]")) {
+                res.send(rows);
+            } else {
+                res.send("No pillars with this Id have been found");
+            }
         });
     }
 });
@@ -208,18 +177,15 @@ router.get('/:id/plants', function(req, res, next) {
         res.send("Requested ID is not a number");
     }
     else {
-        databaseScript.init(function () {
-            databaseScript.connect(function () {
-                databaseScript.query('SELECT * FROM plants WHERE plants.PillarId = ' + id, function (rows) {
-                    databaseScript.end();
+        var db = req.app.get('db');
 
-                    if (rows.localeCompare("[]")) {
-                        res.send(rows);
-                    } else {
-                        res.send("No plants with this PillarId have been found");
-                    }
-                });
-            });
+        db.query('SELECT * FROM plants WHERE plants.PillarId = ' + id, function (rows) {
+
+            if (rows.localeCompare("[]")) {
+                res.send(rows);
+            } else {
+                res.send("No plants with this PillarId have been found");
+            }
         });
     }
 });
@@ -231,18 +197,15 @@ router.get('/:id/images', function(req, res, next) {
        res.send("Requested ID is not a number");
    }
    else {
-       databaseScript.init(function () {
-           databaseScript.connect(function () {
-               databaseScript.query('SELECT * FROM images WHERE images.PillarId = ' + id, function (rows) {
-                   databaseScript.end();
+       var db = req.app.get('db');
 
-                   if (rows.localeCompare("[]")) {
-                       res.send(rows);
-                   } else {
-                       res.send("No images with this PillarId have been found");
-                   }
-               });
-           });
+       db.query('SELECT * FROM images WHERE images.PillarId = ' + id, function (rows) {
+
+           if (rows.localeCompare("[]")) {
+               res.send(rows);
+           } else {
+               res.send("No images with this PillarId have been found");
+           }
        });
    }
 });

@@ -9,18 +9,15 @@ router.get('/:id', function(req, res, next) {
         res.send("Requested ID is not a number");
     }
     else {
-        databaseScript.init(function () {
-            databaseScript.connect(function () {
-                databaseScript.query('SELECT videos.Id as Id, videos.URL as URL FROM videos WHERE videos.Id = ' + id, function (rows) {
-                    databaseScript.end();
+        var db = req.app.get('db');
 
-                    if (rows.localeCompare("[]")) {
-                        res.send(rows);
-                    } else {
-                        res.send("No videos with this Id have been found");
-                    }
-                });
-            });
+        db.query('SELECT videos.Id as Id, videos.URL as URL FROM videos WHERE videos.Id = ' + id, function (rows) {
+
+            if (rows.localeCompare("[]")) {
+                res.send(rows);
+            } else {
+                res.send("No videos with this Id have been found");
+            }
         });
     }
 });

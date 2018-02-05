@@ -1,38 +1,30 @@
 var express = require('express');
 var router = express.Router();
-const databaseScript = require('../server_modules/databaseScript');
 
 router.get('/', function(req, res, next) {
-    databaseScript.init(function () {
-        databaseScript.connect(function () {
-            databaseScript.query('SELECT * FROM beacons', function (rows) {
-                databaseScript.end();
+    var db = req.app.get('db');
 
-                if (rows.localeCompare("[]")) {
-                    res.send(rows);
-                } else {
-                    res.send("No beacons have been found");
-                }
-            });
-        });
+    console.log("got db");
+    db.query("SELECT * FROM beacons", function(rows) {
+        if (rows.localeCompare("[]")) {
+            res.send(rows);
+        } else {
+            res.send("No beacons have been found");
+        }
     });
 });
 
 router.get('/:uuid', function(req, res, next) {
     var uuid = req.params.uuid;
+    var db = req.app.get('db');
 
-    databaseScript.init(function () {
-        databaseScript.connect(function () {
-            databaseScript.query('SELECT * FROM beacons WHERE beacons.uuid LIKE ' + uuid, function (rows) {
-                databaseScript.end();
+    db.query('SELECT * FROM beacons WHERE beacons.uuid LIKE ' + uuid, function (rows) {
 
-                if (rows.localeCompare("[]")) {
-                    res.send(rows);
-                } else {
-                    res.send("No beacons with this uuid have been found");
-                }
-            });
-        });
+        if (rows.localeCompare("[]")) {
+            res.send(rows);
+        } else {
+            res.send("No beacons with this uuid have been found");
+        }
     });
 });
 

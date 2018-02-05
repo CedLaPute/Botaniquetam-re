@@ -15,38 +15,32 @@ var storage = multer.diskStorage({
 
 var upload = multer({storage: storage}).array('image');
 
-const databaseScript = require('../server_modules/databaseScript');
+router.get('/', function(req, res) {
+    var db = req.app.get('db');
 
-router.get('/', function(req, res, next) {
-    databaseScript.init(function() {
-        databaseScript.connect(function () {
-            databaseScript.query('SELECT pillars.Id as PillarId FROM pillars', function (pillarsRow) {
+    db.query('SELECT pillars.Id as PillarId FROM pillars', function (pillarsRow) {
 
-                var pillarjsonarray = JSON.parse(pillarsRow);
-                var pillararray = [];
+        var pillarjsonarray = JSON.parse(pillarsRow);
+        var pillararray = [];
 
-                pillararray.push(0);
+        pillararray.push(0);
 
-                for (var i = 0; i < pillarjsonarray.length; i++) {
-                    pillararray.push(pillarjsonarray[i].PillarId);
-                }
+        for (var i = 0; i < pillarjsonarray.length; i++) {
+            pillararray.push(pillarjsonarray[i].PillarId);
+        }
 
-                databaseScript.query('SELECT plants.Id as PlantId FROM plants', function (plantsRow) {
+        db.query('SELECT plants.Id as PlantId FROM plants', function (plantsRow) {
 
-                    var plantjsonarray = JSON.parse(plantsRow);
-                    var plantarray = [];
+            var plantjsonarray = JSON.parse(plantsRow);
+            var plantarray = [];
 
-                    plantarray.push(0);
+            plantarray.push(0);
 
-                    for (var i = 0; i < plantjsonarray.length; i++) {
-                        plantarray.push(plantjsonarray[i].PlantId);
-                    }
+            for (var i = 0; i < plantjsonarray.length; i++) {
+                plantarray.push(plantjsonarray[i].PlantId);
+            }
 
-                    databaseScript.end();
-
-                    res.render('uploadImage', {title: 'ZHAW Botanic', pillars: pillararray, plants: plantarray});
-                });
-            });
+            res.render('uploadImage', {title: 'ZHAW Botanic', pillars: pillararray, plants: plantarray});
         });
     });
 });
@@ -72,16 +66,12 @@ router.post('/upload', function(req, res, next) {
             res.end("No files have been selected");
         }
         else {
-            databaseScript.init(function () {
-                databaseScript.connect(function () {
+            var db = req.app.get('db');
 
-                    for (i in filenames) {
-                        databaseScript.query('INSERT INTO images (Name, PlantId, PillarId) VALUES ("' + filenames[i] + '", ' + plantId + ', ' + pillarId + ')', function () {
-                        });
-                    }
-                    databaseScript.end();
+            for (i in filenames) {
+                db.query('INSERT INTO images (Name, PlantId, PillarId) VALUES ("' + filenames[i] + '", ' + plantId + ', ' + pillarId + ')', function () {
                 });
-            });
+            }
 
             res.end("Files have been uploaded");
         }

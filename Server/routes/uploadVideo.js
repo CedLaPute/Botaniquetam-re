@@ -1,37 +1,32 @@
 var express = require('express');
 var router = express.Router();
-const databaseScript = require('../server_modules/databaseScript');
 
 router.get('/', function(req, res, next) {
-    databaseScript.init(function() {
-        databaseScript.connect(function () {
-            databaseScript.query('SELECT pillars.Id as PillarId FROM pillars', function (pillarsRow) {
+    var db = req.app.get('db');
 
-                var pillarjsonarray = JSON.parse(pillarsRow);
-                var pillararray = [];
+    db.query('SELECT pillars.Id as PillarId FROM pillars', function (pillarsRow) {
 
-                pillararray.push(0);
+        var pillarjsonarray = JSON.parse(pillarsRow);
+        var pillararray = [];
 
-                for (var i = 0; i < pillarjsonarray.length; i++) {
-                    pillararray.push(pillarjsonarray[i].PillarId);
-                }
+        pillararray.push(0);
 
-                databaseScript.query('SELECT plants.Id as PlantId FROM plants', function (plantsRow) {
+        for (var i = 0; i < pillarjsonarray.length; i++) {
+            pillararray.push(pillarjsonarray[i].PillarId);
+        }
 
-                    var plantjsonarray = JSON.parse(plantsRow);
-                    var plantarray = [];
+        db.query('SELECT plants.Id as PlantId FROM plants', function (plantsRow) {
 
-                    plantarray.push(0);
+            var plantjsonarray = JSON.parse(plantsRow);
+            var plantarray = [];
 
-                    for (var i = 0; i < plantjsonarray.length; i++) {
-                        plantarray.push(plantjsonarray[i].PlantId);
-                    }
+            plantarray.push(0);
 
-                    databaseScript.end();
+            for (var i = 0; i < plantjsonarray.length; i++) {
+                plantarray.push(plantjsonarray[i].PlantId);
+            }
 
-                    res.render('uploadVideo', {title: 'ZHAW Botanic', plants: plantarray, pillars: pillararray});
-                });
-            });
+            res.render('uploadVideo', {title: 'ZHAW Botanic', plants: plantarray, pillars: pillararray});
         });
     });
 });
@@ -55,13 +50,9 @@ router.post('/upload', function(req, res) {
         res.end("URL is empty");
     }
     else {
-        databaseScript.init(function () {
-            databaseScript.connect(function () {
-                databaseScript.query('INSERT INTO videos (URL, PlantId, PillarId) VALUES ("' + url + '", ' + plantId + ', ' + pillarId + ')', function () {
-                    databaseScript.end();
-                });
-            });
-        });
+        var db = req.app.get('db');
+
+        db.query('INSERT INTO videos (URL, PlantId, PillarId) VALUES ("' + url + '", ' + plantId + ', ' + pillarId + ')', function () {});
 
         res.end("Files have been uploaded");
     }
