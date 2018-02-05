@@ -18,27 +18,22 @@ router.get('/', function(req, res, next) {
     });
 });
 
-router.get('/:id', function(req, res, next) {
-    var id = parseInt(req.params.id);
+router.get('/:uuid', function(req, res, next) {
+    var uuid = req.params.uuid;
 
-    if (isNaN(id)) {
-        res.send("Requested ID is not a number");
-    }
-    else {
-        databaseScript.init(function () {
-            databaseScript.connect(function () {
-                databaseScript.query('SELECT * FROM beacons WHERE beacons.Id = ' + id, function (rows) {
-                    databaseScript.end();
+    databaseScript.init(function () {
+        databaseScript.connect(function () {
+            databaseScript.query('SELECT * FROM beacons WHERE beacons.uuid LIKE ' + uuid, function (rows) {
+                databaseScript.end();
 
-                    if (rows.localeCompare("[]")) {
-                        res.send(rows);
-                    } else {
-                        res.send("No beacons with this Id have been found");
-                    }
-                });
+                if (rows.localeCompare("[]")) {
+                    res.send(rows);
+                } else {
+                    res.send("No beacons with this uuid have been found");
+                }
             });
         });
-    }
+    });
 });
 
 module.exports = router;
