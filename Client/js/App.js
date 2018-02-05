@@ -1,129 +1,54 @@
-
 import React, { Component } from 'react';
-import {
-    Platform,
-    StyleSheet,
-    Text,
-    View,
-    Dimensions, ScrollView, Image
-} from 'react-native';
-import Marker, {xPos} from "./components/Marker";
-import {getPlants} from "./actions/plants";
-import {connect} from "react-redux";
-var map = require( "../resources/map.png")
+import Settings from './components/Settings';
+import Menu from './components/Menu';
+import TourList from './components/TourList'
+import Walk from './components/Walk'
+import { Router, Scene } from 'react-native-router-flux';
 
-export const serverAddress = "http://psyycker.fr.nf:5678"
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
-const screendim = Dimensions.get("window")
-
-class App extends Component<{}> {
-
-  constructor(props){
-    super(props)
-
-      this.props.fetchPlants()
+export default class App extends React.Component{
 
 
-      console.log("la map")
-    console.log(map)
+    render(){
+        return (
+            <Router>
+                <Scene key="root">
+                    <Scene
+                        key="menu"
+                        component={Menu}
+                        title="Menu"
+                        initial
+                        hideNavBar={true}
+                    />
 
-    this.state = {height : 0, width : 0}
+                    <Scene
+                        key="settings"
+                        component={Settings}
+                        title="Settings"
+                        hideNavBar={true}
 
+                    />
 
+                    <Scene
+                        key="tour_list"
+                        component={TourList}
+                        title="TourList"
+                        hideNavBar={true}
 
+                    />
 
-  }
+                    <Scene
+                        key="walk"
+                        component={Walk}
+                        title="Walk"
+                        hideNavBar={true}
 
-
-  getMarkers(){
-    return this.props.plants.map((item, index) => {
-      return <Marker item={item} key={index}/>
-    })
-  }
-
-  getSelectedPlant(){
-    if (Object.keys(this.props.selected).length > 0){
-      return         <View style={{width : screendim.width, height : screendim.height / 2.4 }}>
-
-      <Text style={{fontSize: screendim.width / 20}}>Plant name : {this.props.selected.Name}</Text>
-
-        <Text style={{fontSize: screendim.width / 20}}>Description : {this.props.selected.Description}</Text>
-
-      </View>
+                    />
+                </Scene>
+            </Router>
+        );
 
     }
-  }
 
-
-
-
-
-  render() {
-    return (
-      <View style={styles.container}>
-
-
-        <View style={{borderWidth: 1, width : screendim.width / 1, height: screendim.height / 1.8}}>
-          <ScrollView>
-            <ScrollView horizontal={true}>
-              <View style={{width : 890, height : 530}}>
-              <Image style={{flex : 1, width : undefined, height : undefined}} resizeMode="contain" source={require("../resources/map.png")}/>
-              </View>
-                {this.getMarkers()}
-
-
-            </ScrollView>
-          </ScrollView>
-        </View>
-
-          {this.getSelectedPlant()}
-
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-      alignItems: "center"
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
-
-
-
-function mapStateToProps (store) {
-    return {
-        plants: store.plants.plants,
-        selected : store.plants.selected
-    }
-}
-
-function mapDispatchToProps (dispatch) {
-    return {
-      fetchPlants : () => dispatch(getPlants())
-    }
 }
 
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(App)

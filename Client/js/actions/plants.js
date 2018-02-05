@@ -1,4 +1,4 @@
-import {serverAddress} from "../App";
+import {serverAddress} from "../components/MapPage";
 
 export const SET_PLANTS = "SET_PLANTS"
 export const SET_SELECTED = "SET_SELECTED"
