@@ -4,6 +4,7 @@ import Menu from './components/Menu';
 import TourList from './components/TourList'
 import Walk from './components/Walk'
 import { Router, Scene } from 'react-native-router-flux';
+import PlantDetails from "./components/PlantDetails";
 
 export default class App extends React.Component{
 
@@ -43,6 +44,16 @@ export default class App extends React.Component{
                         hideNavBar={true}
 
                     />
+
+                    <Scene
+                        key="details"
+                        component={PlantDetails}
+                        title="Details"
+                        hideNavBar={true}
+
+                    />
+
+
                 </Scene>
             </Router>
         );

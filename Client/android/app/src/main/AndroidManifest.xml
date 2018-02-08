@@ -19,6 +19,8 @@
       android:icon="@mipmap/ic_launcher"
       android:theme="@style/AppTheme">
 
+        <service android:name="com.kontakt.sdk.android.ble.service.ProximityService" android:exported="false"/>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBfiA4Yg7hEFqBbC17fqxgZ6uujCIUqtnw"/>

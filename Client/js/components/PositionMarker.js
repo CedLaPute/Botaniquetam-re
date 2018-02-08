@@ -172,13 +172,12 @@ export const yPos = {
     }
 
 
-    onMarkerPress(){
-        this.props.setSelectedPlant(this.props.item)
-    }
-
     render(){
-        return(<TouchableOpacity onPress={() => {this.onMarkerPress()}} style={{position: "absolute", top : yPos[this.props.item.CoordinateY], left : xPos[this.props.item.CoordinateX], width : 50, height: 50}} >
-            <Image style={{width : 50, height: 50}} source={require("../../resources/marker.png")}/>
+
+
+
+        return(<TouchableOpacity  style={{position: "absolute", top : yPos[this.props.position.CoordinateY], left : xPos[this.props.position.CoordinateX], width : 50, height: 50}} >
+            <Image style={{width : 50, height: 50}} source={require("../../resources/blueMarker.png")}/>
         </TouchableOpacity>)
     }
 

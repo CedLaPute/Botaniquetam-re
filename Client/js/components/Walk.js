@@ -5,7 +5,6 @@ import {
     Text,
     View
 } from 'react-native';
-import {Actions} from 'react-native-router-flux';
 import MapPage from "./MapPage";
 
 const Walk = () => {

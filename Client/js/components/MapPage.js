@@ -5,41 +5,136 @@ import {
     StyleSheet,
     Text,
     View,
-    Dimensions, ScrollView, Image
+    Dimensions, ScrollView, Image, Button, TouchableOpacity, DeviceEventEmitter
 } from 'react-native';
 import Marker, {xPos} from "./Marker";
-import {getPlants} from "../actions/plants";
+import {getBeacons, getPlants, setPosition} from "../actions/plants";
 import {connect} from "react-redux";
+import {Actions} from 'react-native-router-flux';
 var map = require( "../../resources/map.png")
+import Kontakt from 'react-native-kontaktio';
+import PositionMarker from "./PositionMarker";
+const konnect = Kontakt.connect;
+const  startScanning  = Kontakt.startScanning;
+const disconnect = Kontakt.disconnect;
 
 export const serverAddress = "http://psyycker.fr.nf:5678"
 
 
 const screendim = Dimensions.get("window")
 
-class App extends Component<{}> {
+
+
+const distance = {
+
+
+    "IMMEDIATE" : 0,
+    "NEAR" : 1,
+    "FAR" : 2
+
+}
+
+class MapPage extends Component<{}> {
 
   constructor(props){
     super(props)
 
       this.props.fetchPlants()
+      this.props.fetchBeacons()
+
+
 
   }
 
 
+    componentDidMount() {
+        konnect()
+            .then(() => startScanning())
+            .catch(error => console.log('error', error));
+
+        DeviceEventEmitter.addListener(
+            'beaconsDidUpdate',
+            ({ beacons, region }) => {
+                console.log('beaconsDidUpdate', beacons, region);
+
+                let beacon = undefined;
+
+                beacons.map(item => {
+
+
+                    if (beacon === undefined) {
+                        beacon = item;
+                        return;
+                    }
+
+                    const currentDistance = distance[beacon.proximity]
+                    const itemDistance = distance[item.proximity]
+
+                    if (currentDistance > itemDistance){
+
+                    }else if (currentDistance === itemDistance){
+                        if (beacon.accuracy > item.accuracy){
+
+                        }else{
+                            beacon = item;
+                        }
+                    }else{
+                        beacon = item;
+                    }
+
+                })
+
+                const uuid = beacon.uuid;
+
+                this.props.beacons.map((beacon) => {
+
+
+                    if (uuid.toString() === beacon.uuid.toString()){
+                        this.props.setPosition(beacon)
+                    }
+
+                })
+
+
+
+            }
+        );
+    }
+
+    componentWillUnmount(){
+        disconnect();
+        DeviceEventEmitter.removeAllListeners();
+    }
+
   getMarkers(){
     return this.props.plants.map((item, index) => {
-      return <Marker item={item} key={index}/>
+      return <Marker color={"red"} item={item} key={index}/>
     })
+  }
+
+
+  getPositionMarker(){
+
+
+      if (Object.keys(this.props.position).length > 0){
+          return <PositionMarker position={this.props.position}/>
+      }
+
   }
 
   getSelectedPlant(){
     if (Object.keys(this.props.selected).length > 0){
-      return         <View style={{width : screendim.width, height : screendim.height / 2.4 }}>
+      return         <View style={{width : screendim.width, height : screendim.height / 4, alignItems: "center" }}>
 
-      <Text style={{fontSize: screendim.width / 20}}>Plant name : {this.props.selected.Name}</Text>
+          <View style={{marginTop: screendim.height / 10}}>
+          <TouchableOpacity
+              style={styles.button}
+              onPress={() => Actions.details()}
+          >
+              <Text style={styles.textButton}>{this.props.selected.Name}</Text>
+          </TouchableOpacity>
+          </View>
 
-        <Text style={{fontSize: screendim.width / 20}}>Description : {this.props.selected.Description}</Text>
 
       </View>
 
@@ -51,6 +146,8 @@ class App extends Component<{}> {
 
 
   render() {
+
+
     return (
       <View style={styles.container}>
 
@@ -62,13 +159,23 @@ class App extends Component<{}> {
               <Image style={{flex : 1, width : undefined, height : undefined}} resizeMode="contain" source={require("../../resources/map.png")}/>
               </View>
                 {this.getMarkers()}
-
+                {this.getPositionMarker()}
 
             </ScrollView>
           </ScrollView>
         </View>
 
           {this.getSelectedPlant()}
+
+          <View style={{position: "absolute", bottom : screendim.height / 10}}>
+              <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => Actions.pop()}
+              >
+                  <Text style={styles.textButton}>Back</Text>
+              </TouchableOpacity>
+          </View>
+
 
       </View>
     );
@@ -90,6 +197,18 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
+    button: {
+        backgroundColor: '#47525E',
+        width: 200,
+        height: 50,
+        borderRadius: 90,
+    },
+    textButton: {
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 28,
+    },
+
 });
 
 
@@ -97,13 +216,17 @@ const styles = StyleSheet.create({
 function mapStateToProps (store) {
     return {
         plants: store.plants.plants,
-        selected : store.plants.selected
+        selected : store.plants.selected,
+        beacons : store.plants.beacons,
+        position : store.plants.position
     }
 }
 
 function mapDispatchToProps (dispatch) {
     return {
-      fetchPlants : () => dispatch(getPlants())
+        fetchPlants : () => dispatch(getPlants()),
+        fetchBeacons : () => dispatch(getBeacons()),
+        setPosition : (beacon) => dispatch(setPosition(beacon))
     }
 }
 
@@ -111,4 +234,4 @@ function mapDispatchToProps (dispatch) {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(App)
+)(MapPage)
