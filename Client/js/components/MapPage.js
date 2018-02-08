@@ -5,7 +5,7 @@ import {
     StyleSheet,
     Text,
     View,
-    Dimensions, ScrollView, Image, Button, TouchableOpacity, DeviceEventEmitter
+    Dimensions, ScrollView, Image, Button, TouchableOpacity, DeviceEventEmitter, AsyncStorage
 } from 'react-native';
 import Marker, {xPos} from "./Marker";
 import {getBeacons, getPlants, setPosition} from "../actions/plants";
@@ -14,6 +14,7 @@ import {Actions} from 'react-native-router-flux';
 var map = require( "../../resources/map.png")
 import Kontakt from 'react-native-kontaktio';
 import PositionMarker from "./PositionMarker";
+import PlantList from "./PlantList";
 const konnect = Kontakt.connect;
 const  startScanning  = Kontakt.startScanning;
 const disconnect = Kontakt.disconnect;
@@ -42,12 +43,19 @@ class MapPage extends Component<{}> {
       this.props.fetchPlants()
       this.props.fetchBeacons()
 
+      this.state = {blind : undefined}
 
 
   }
 
 
+
+
+
     componentDidMount() {
+
+
+
         konnect()
             .then(() => startScanning())
             .catch(error => console.log('error', error));
@@ -55,7 +63,6 @@ class MapPage extends Component<{}> {
         DeviceEventEmitter.addListener(
             'beaconsDidUpdate',
             ({ beacons, region }) => {
-                console.log('beaconsDidUpdate', beacons, region);
 
                 let beacon = undefined;
 
@@ -142,12 +149,14 @@ class MapPage extends Component<{}> {
   }
 
 
-
+    onListItemClick(){
+        Actions.details();
+    }
 
 
   render() {
 
-
+    if (this.props.blind === false)
     return (
       <View style={styles.container}>
 
@@ -179,6 +188,26 @@ class MapPage extends Component<{}> {
 
       </View>
     );
+    else if (this.props.blind === true){
+        return (
+            <View style={{flex : 1}}>
+                <View style={{width : screendim.width, alignItems : "center"}}>
+                <PlantList onPlantClick={this.onListItemClick.bind(this)} list={this.props.plants}/>
+                </View>
+                <TouchableOpacity onPress={() => {Actions.pop()}} style={{position : "absolute", bottom : 0, width : screendim.width, top : screendim.height / 1.2, backgroundColor: "grey", alignItems : "center", justifyContent: "center"}}>
+
+                    <Text style={{fontSize : screendim.width / 5, color : "white"}}>BACK</Text>
+
+                </TouchableOpacity>
+            </View>
+        )
+    }else {
+        return (
+            <View>
+                <Text>Loading</Text>
+            </View>
+        )
+    }
   }
 }
 
@@ -218,7 +247,8 @@ function mapStateToProps (store) {
         plants: store.plants.plants,
         selected : store.plants.selected,
         beacons : store.plants.beacons,
-        position : store.plants.position
+        position : store.plants.position,
+        blind : store.settings.blindMode
     }
 }
 

@@ -40,7 +40,6 @@ export const getBeacons = () => dispatch => {
         },
     }).then((response) => response.json())
         .then(async (responseJson) => {
-            console.log(responseJson)
             dispatch({
                 type : SET_BEACONS,
                 data : responseJson

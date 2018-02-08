@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
 import {
-    Platform,
     StyleSheet,
     Text,
-    View
+    View,
+    TouchableOpacity
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 
 const TourList = () => {
     return(
         <View style={styles.container}>
-            <Text
-                style={styles.welcome}
-            >
+            <Text style={styles.welcome}>
                 Tour List Page
             </Text>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => Actions.pop()}
+            >
+                <Text style={styles.textButton}>Back</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -36,6 +40,18 @@ const styles = StyleSheet.create({
         color: '#333333',
         marginBottom: 5,
     },
+    button: {
+        backgroundColor: '#47525E',
+        width: 200,
+        height: 50,
+        borderRadius: 90,
+    },
+    textButton: {
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 28,
+    },
+
 });
 
 export default TourList;

@@ -5,48 +5,38 @@ import {
     Text,
     View,
     Dimensions,
-    Switch, TouchableOpacity
+    Switch, TouchableOpacity, AsyncStorage
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
+import {setBlindMode} from "../actions/settings";
+import {connect} from "react-redux";
 
 
 
 const screenDim = Dimensions.get("window")
 
-export default class Settings extends React.Component{
+class Settings extends React.Component{
 
 
     constructor(props){
         super(props)
 
 
-        this.state = {blind : false, enlarge : false, button : false}
+        this.state = {blind : this.props.blind}
 
     }
 
-    onBlindChange(){
+     onBlindChange(){
         if (this.state.blind === true){
             this.setState({blind : false})
+            this.props.setBlindMode(false)
         }else{
             this.setState({blind : true})
+            this.props.setBlindMode(true)
+
         }
     }
 
-    onEnlargeChange(){
-        if (this.state.enlarge === true){
-            this.setState({enlarge : false})
-        }else{
-            this.setState({enlarge : true})
-        }
-    }
-
-    onButtonChange(){
-        if (this.state.button === true){
-            this.setState({button : false})
-        }else{
-            this.setState({button : true})
-        }
-    }
 
 
     render(){
@@ -61,15 +51,6 @@ export default class Settings extends React.Component{
                     <Switch value={this.state.blind} onValueChange={() => {this.onBlindChange()}} style={{marginLeft : screenDim.width / 20}}/>
                 </View>
 
-                <View style={{width : screenDim.width, marginTop : screenDim.height / 10, flexDirection: "row"}}>
-                    <Text style={{fontSize : screenDim.width / 20, marginLeft: screenDim.width / 20}}>Enlarge text</Text>
-                    <Switch value={this.state.enlarge} onValueChange={() => {this.onEnlargeChange()}} style={{marginLeft : screenDim.width / 20}}/>
-                </View>
-
-                <View style={{width : screenDim.width, marginTop : screenDim.height / 10, flexDirection: "row"}}>
-                    <Text style={{fontSize : screenDim.width / 20, marginLeft: screenDim.width / 20}}>Enlarge button</Text>
-                    <Switch value={this.state.button} onValueChange={() => {this.onButtonChange()}} style={{marginLeft : screenDim.width / 20}}/>
-                </View>
 
                 <View style={{position: "absolute", bottom : screenDim.height / 10, width : screenDim.width, alignItems: "center"}}>
                     <TouchableOpacity
@@ -109,6 +90,7 @@ const styles = StyleSheet.create({
         width: 200,
         height: 50,
         borderRadius: 90,
+        justifyContent: "center"
     },
     textButton: {
         textAlign: 'center',
@@ -117,3 +99,25 @@ const styles = StyleSheet.create({
     },
 
 });
+
+
+
+
+
+function mapStateToProps (store) {
+    return {
+        blind : store.settings.blindMode
+    }
+}
+
+function mapDispatchToProps (dispatch) {
+    return {
+        setBlindMode : (mode) => dispatch(setBlindMode(mode))
+    }
+}
+
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Settings)

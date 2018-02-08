@@ -15,7 +15,7 @@ class PlantDetails extends React.Component{
         super(props)
 
 
-        this.state = {play : true};
+        this.state = {play : false};
     }
 
     onFullScreenChange(e){
@@ -25,20 +25,23 @@ class PlantDetails extends React.Component{
         }
     }
 
+    onVideoStart(){
+        this.setState({play : true})
+    }
+
     render(){
-        return <View style={{flex : 1}}>
+        return (<View style={{flex : 1}}>
             <View style={{width : "100%", height : screendim.height / 10, backgroundColor : "#47525E", alignItems: "center", justifyContent: "center"}}>
                 <TouchableOpacity onPress={() => {Actions.pop()}} style={{position : "absolute", left : 0, top : 0, height : "100%", width : screendim.width / 7, justifyContent : "center", alignItems : "center"}}>
                     <Text style={{color : "white"}}>Back</Text>
                 </TouchableOpacity>
                 <Text style={{color : "white", fontSize : screendim.width / 15, }}>{this.props.selected.Name}</Text>
             </View>
-            <TouchableOpacity onPress={() => {this.setState({play : true})}} style={{width : "100%", height : screendim.height / 3.5, backgroundColor : "black", alignItems : "center", justifyContent : "center"}}>
+
+            <TouchableOpacity onPress={() => {this.onVideoStart()}} style={{width : "100%", height : screendim.height / 3.5, backgroundColor : "black", alignItems : "center", justifyContent : "center"}}>
                 <Image style={{width : screendim.height / 10, height : screendim.height / 10}}  source={require("../../resources/play.png")}  />
             </TouchableOpacity>
 
-
-$
 
             <View style={{width : screendim.width, alignItems : "center", marginTop: screendim.height / 15}}>
                 <Text style={{width : screendim.width / 1.2, textAlign : "center", fontSize : screendim.width / 20}}>{this.props.selected.Description}</Text>
@@ -66,7 +69,8 @@ $
                 style={{ width : 0, height : 0 }}
             />
 
-        </View>
+
+        </View>)
     }
 
 
