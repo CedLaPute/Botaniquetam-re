@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    h1= "Ajouter un tour"
+
+    form(method="post", action="/tours/upload")
+
+        div(class="form-group")
+            label(for="nameInput") Nom du tour
+            input(class="form-control", type="text", id="nameInput", name="nameInput", placeholder="Name")
+
+        label= "Séléctionner les plantes"
+        div(class="list-group")
+            each plant in plants
+                a(href="#", class="list-group-item") #{plant}
+                    input(type="checkbox", class="pull-right", id=plant, name=plant)
+
+        input(type="submit", value="Upload", class="btn btn-default")
