@@ -4,12 +4,11 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
     var db = req.app.get('db');
 
-    console.log("got db");
     db.query("SELECT * FROM plants", function(rows) {
         if (rows.localeCompare("[]")) {
             res.send(rows);
         } else {
-            res.send("No beacons have been found");
+            res.send("No plants have been found");
         }
     });
 });
