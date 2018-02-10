@@ -194,7 +194,7 @@ class MapPage extends Component<{}> {
                 <View style={{width : screendim.width, alignItems : "center"}}>
                 <PlantList onPlantClick={this.onListItemClick.bind(this)} list={this.props.plants}/>
                 </View>
-                <TouchableOpacity onPress={() => {Actions.pop()}} style={{position : "absolute", bottom : 0, width : screendim.width, top : screendim.height / 1.2, backgroundColor: "grey", alignItems : "center", justifyContent: "center"}}>
+                <TouchableOpacity onPress={() => {Actions.pop()}} style={{position : "absolute", bottom : 0, width : screendim.width, top : screendim.height / 1.2, backgroundColor: "#47525E", alignItems : "center", justifyContent: "center"}}>
 
                     <Text style={{fontSize : screendim.width / 5, color : "white"}}>BACK</Text>
 

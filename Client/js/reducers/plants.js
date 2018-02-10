@@ -1,4 +1,4 @@
-import {SET_PLANTS, SET_SELECTED, SET_BEACONS, SET_POSITION} from "../actions/plants"
+import {SET_PLANTS, SET_SELECTED, SET_BEACONS, SET_POSITION, SET_SELECTED_TOUR, SET_TOURS} from "../actions/plants"
 
 
 const initialState = {
@@ -6,7 +6,9 @@ const initialState = {
     plants : [],
     beacons : [],
     selected : {},
-    position : {}
+    position : {},
+    tours : [],
+    selectedTour : {}
 
 
 }
@@ -36,8 +38,14 @@ export default function (state = initialState, action) {
             return Object.assign({}, state, {
                 position : data
             })
-
-
+        case SET_TOURS:
+            return Object.assign({}, state, {
+                tours : data
+            })
+        case SET_SELECTED_TOUR:
+            return Object.assign({}, state, {
+                selectedTour : data
+            })
         default:
             return state;
     }

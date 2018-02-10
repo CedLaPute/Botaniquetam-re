@@ -7,6 +7,7 @@ import {
     Dimensions,
     Switch, TouchableOpacity, AsyncStorage
 } from 'react-native';
+import ToggleSwitch from 'toggle-switch-react-native'
 import {Actions} from 'react-native-router-flux';
 import {setBlindMode} from "../actions/settings";
 import {connect} from "react-redux";
@@ -47,17 +48,24 @@ class Settings extends React.Component{
 
 
                 <View style={{width : screenDim.width, marginTop : screenDim.height / 10, flexDirection: "row"}}>
-                    <Text style={{fontSize : screenDim.width / 20, marginLeft: screenDim.width / 20}}>Blind mode</Text>
-                    <Switch value={this.state.blind} onValueChange={() => {this.onBlindChange()}} style={{marginLeft : screenDim.width / 20}}/>
+                    <Text style={{fontSize : screenDim.width / 10, marginLeft: screenDim.width / 20}}>Blind mode</Text>
+                    <View style={{justifyContent : "center", marginLeft : screenDim.width / 20}}>
+                    <ToggleSwitch
+                        isOn={this.state.blind}
+                        onColor='green'
+                        offColor='grey'
+                        size='large'
+                        onToggle={ () => {this.onBlindChange()}}
+                    />
+                    </View>
                 </View>
 
 
                 <View style={{position: "absolute", bottom : screenDim.height / 10, width : screenDim.width, alignItems: "center"}}>
                     <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => Actions.pop()}
-                    >
-                        <Text style={styles.textButton}>SUBMIT</Text>
+                        style={this.props.blind === true ? styles.fatButton : styles.button}
+                        onPress={() => Actions.pop()}>
+                        <Text style={this.props.blind === true ? styles.fatTextButton : styles.textButton}>SUBMIT</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -97,6 +105,18 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 28,
     },
+    fatTextButton: {
+        textAlign: 'center',
+        color: 'white',
+        fontSize: screenDim.width / 6,
+    },
+    fatButton: {
+        backgroundColor: '#47525E',
+        width: screenDim.width,
+        height: screenDim.height / 5,
+        justifyContent : "center",
+    },
+
 
 });
 
