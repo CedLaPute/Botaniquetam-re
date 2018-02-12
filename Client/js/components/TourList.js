@@ -46,10 +46,7 @@ class TourList extends React.Component{
     render(){
         return(
             <View style={styles.container}>
-                <View style={{width : "100%", height : screendim.height / 10, backgroundColor : "#47525E", alignItems: "center", justifyContent: "center"}}>
-                    <TouchableOpacity onPress={() => {this.onBack()}} style={{position : "absolute", left : 0, top : 0, height : "100%", width : this.props.blind === true ? screendim.width / 4 : screendim.width / 7, justifyContent : "center", alignItems : "center"}}>
-                        <Text style={{color : "white", fontSize : this.props.blind === true ? screendim.width / 10 : screendim.width / 20}}>Back</Text>
-                    </TouchableOpacity>
+                <View style={{width : "100%", height : screendim.height / 10, backgroundColor : "#47525E", alignItems: "center", justifyContent: "center",}}>
                     <Text style={this.props.blind === true ? styles.fatTitle : styles.title}>Select a tour</Text>
                 </View>
 
@@ -61,13 +58,13 @@ class TourList extends React.Component{
                 </View>
                 </View>
 
-
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => Actions.pop()}
                 >
-                    <Text style={styles.textButton}>Back</Text>
+                    <Text style={this.props.blind === true ? styles.fatTextButton : styles.textButton}>Back</Text>
                 </TouchableOpacity>
+
             </View>
         );
     }
@@ -85,8 +82,6 @@ const styles = StyleSheet.create({
     fatTitle : {
         color : "white",
         fontSize :  screendim.width / 7,
-        position: "absolute",
-        right : screendim.width / 20
     },
     instructions: {
         textAlign: 'center',
@@ -95,15 +90,20 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#47525E',
-        width: 200,
-        height: 50,
-        borderRadius: 90,
+        position : "absolute",
+        bottom : 0, left : 0, right : 0, top : screendim.height / 1.16,
+        justifyContent : "center"
     },
     textButton: {
         textAlign: 'center',
         color: 'white',
-        fontSize: 28,
+        fontSize: screendim.width / 12,
     },
+    fatTextButton : {
+        textAlign: 'center',
+        color: 'white',
+        fontSize: screendim.width / 6,
+    }
 
 });
 

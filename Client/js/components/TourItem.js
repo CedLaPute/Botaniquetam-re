@@ -1,5 +1,5 @@
 import React from "react"
-import {Text, TouchableOpacity, View, StyleSheet, Dimensions} from "react-native";
+import {Text, TouchableOpacity, View, StyleSheet, Dimensions, Image} from "react-native";
 import {getTours, setSelectedTour} from "../actions/plants";
 import {connect} from "react-redux";
 
@@ -26,7 +26,8 @@ class TourItem extends React.Component{
     render(){
         return(
             <TouchableOpacity onPress={() => {this.onPress()}} style={this.props.blind === true ? styles.fatcontainer : styles.container}>
-                <Text>{this.props.item.Name}</Text>
+                <Text style={this.props.blind === true ? styles.fatText : styles.text}>{this.props.item.Name}</Text>
+                <Image style={this.props.blind === true ? styles.fatIcon : styles.icon} source={require("../../resources/rightArrow.png")}/>
             </TouchableOpacity>
         )
     }
@@ -42,10 +43,33 @@ const styles = StyleSheet.create({
         height : screendim.height / 10,
         borderBottomColor : "grey",
         borderBottomWidth: 1,
-        justifyContent: "center"
+        alignItems: "center",
+        flexDirection: "row"
     },
     fatcontainer : {
-
+        width : "100%",
+        height : screendim.height / 7,
+        borderBottomColor : "grey",
+        borderBottomWidth: 1,
+        alignItems: "center",
+        flexDirection: "row"
+    },
+    text : {
+        fontSize : screendim.width / 15,
+        marginLeft: screendim.width / 20
+    },
+    fatText : {
+        fontSize : screendim.width / 5,
+        marginLeft: screendim.width / 20
+    },
+    icon : {
+        width : screendim.height / 15,
+        height : screendim.height / 15,
+        marginLeft: screendim.width / 2
+    }, fatIcon : {
+        width : screendim.height / 8,
+        height : screendim.height / 8,
+        marginLeft: screendim.width / 10
     }
 
 

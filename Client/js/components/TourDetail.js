@@ -1,5 +1,5 @@
 import React from "react"
-import {Text, View, StyleSheet, Dimensions, TouchableOpacity} from "react-native";
+import {Text, View, StyleSheet, Dimensions, TouchableOpacity, ScrollView, Alert} from "react-native";
 import {connect} from "react-redux";
 import {Actions} from 'react-native-router-flux';
 import {setSelectedTour} from "../actions/plants";
@@ -75,6 +75,18 @@ class TourDetail extends React.Component{
     }
 
 
+    onletsgoPress(){
+        Alert.alert(
+            'Coming soon',
+            'This feature is not available yet, but It\'ll be soon !',
+            [
+
+                {text: 'OK'},
+            ],
+            { cancelable: false }
+        )
+    }
+
     render(){
 
         this.selected = this.props.selected[0];
@@ -113,7 +125,9 @@ class TourDetail extends React.Component{
 
                     <View style={{width : screendim.width, alignItems : "center", marginTop: screendim.height / 20}}>
                         <View style={{width : screendim.width / 1.1, borderColor : "grey", borderWidth: 1, height : screendim.height / 1.9}}>
+                            <ScrollView>
                             {this.getPlantList()}
+                            </ScrollView>
                         </View>
                     </View>
 
@@ -131,6 +145,14 @@ class TourDetail extends React.Component{
                     </TouchableOpacity>
 
                     </View>
+
+
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => this.onletsgoPress()}
+                    >
+                        <Text style={this.props.blind === true ? styles.fatTextButton : styles.textButton}>Let's Go !</Text>
+                    </TouchableOpacity>
 
 
 
@@ -161,15 +183,20 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#47525E',
-        width: 200,
-        height: 50,
-        borderRadius: 90,
+        position : "absolute",
+        bottom : 0, left : 0, right : 0, top : screendim.height / 1.16,
+        justifyContent : "center"
     },
     textButton: {
         textAlign: 'center',
         color: 'white',
-        fontSize: 28,
+        fontSize: screendim.width / 12,
     },
+    fatTextButton : {
+        textAlign: 'center',
+        color: 'white',
+        fontSize: screendim.width / 6,
+    }
 })
 
 function mapStateToProps (store) {
